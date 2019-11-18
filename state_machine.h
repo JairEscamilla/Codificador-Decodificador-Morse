@@ -4,6 +4,7 @@
 // Incluyendo las bibliotecas
 #include<stdio.h>
 #include<stdlib.h>
+#include <unistd.h>
 
 // Enum de los estados de la maquina de estados
 typedef enum states{
@@ -12,24 +13,25 @@ typedef enum states{
     ENCODE,
     DECODE,
     FREE_MEMORY,
-    FINISH
-}States;
+    FINISH,
+    STATE_NUM
+} States;
 
 // Estructura que contendra etiqueta y funcion
-typedef struct StateMachine{
+typedef struct StateMachine{    
     States state;
     void (*process)(States* state);
 }StateMachine;
 
 // Prototipos de las funciones ejecutables de la maquina de estados
-void load_file();
-void wait();
-void encode();
-void decode();
-void free_memory();
-void finish();
+void load_file(States* state);
+void wait(States* state);
+void encode(States* state);
+void decode(States* state);
+void free_memory(States* state);
+void finish(States* state);
 
 States machine_initialiser(void); // Inicializador de la maquina de estados
-
+void print_process_bar(size_t time);
 
 #endif // !state_machine_h
