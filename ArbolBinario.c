@@ -34,8 +34,7 @@ void ExtraerArchivo(TipoNodo **Raiz){
     printf("El archivo no existe\n");
     printf("Saliendo del programa...");
     exit(0);
-  }
-  else{
+  }else{
     while(fgets(Renglon,50,Archivo) != NULL){
       Renglon[strlen(Renglon)] = '\0';
       sscanf(Renglon,"%c, %lf", &Letra, &Probabilidad);
@@ -81,9 +80,9 @@ void InsertarArbol(TipoNodo **Raiz, double Probabilidad, char Letra){
 
 void ImprimirArbol(TipoNodo *Raiz){
   if(Raiz != NULL){
+    printf("%c\n",Raiz->Letra);
     ImprimirArbol(Raiz->izq);
     ImprimirArbol(Raiz->der);
-    printf("%c\n",Raiz->Letra);
   }
 }
 
