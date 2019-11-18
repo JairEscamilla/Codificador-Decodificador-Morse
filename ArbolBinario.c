@@ -20,9 +20,9 @@ int main (void){
   printf("Presione Enter para continuar...");
   __fpurge(stdin);
   getchar();
-	ImprimirArbol(Raiz); // Recorre Posorden
-	printf("Saliendo del programa...\n");
-	BorrarArbol(Raiz);
+  ImprimirArbol(Raiz); // Recorre Posorden
+  printf("Saliendo del programa...\n");
+  BorrarArbol(Raiz);
 }
 
 void ExtraerArchivo(TipoNodo **Raiz){
@@ -31,9 +31,9 @@ void ExtraerArchivo(TipoNodo **Raiz){
   double Probabilidad;
   Archivo = fopen("ordenletras.txt","rt");
   if(Archivo == NULL){
-      printf("El archivo no existe\n");
-      printf("Saliendo del programa...");
-      exit(0);
+    printf("El archivo no existe\n");
+    printf("Saliendo del programa...");
+    exit(0);
   }
   else{
     while(fgets(Renglon,50,Archivo) != NULL){
@@ -60,20 +60,20 @@ void InsertarArbol(TipoNodo **Raiz, double Probabilidad, char Letra){
   while(Avanza != NULL){
     if(Probabilidad > Avanza->Probabilidad){ //muevete a la derecha
       if(Avanza->der != NULL)
-	     Avanza = Avanza->der;
-	    else{
-	      Avanza->der=Nuevo;
-	      return;
-	    }
-	  }
+	Avanza = Avanza->der;
+      else{
+	Avanza->der=Nuevo;
+	return;
+      }
+    }
     if(Probabilidad <= Avanza->Probabilidad){ //muevete a la izquierda
       if(Avanza->izq != NULL)
         Avanza = Avanza->izq;
       else{
         Avanza->izq = Nuevo;
-	      return;
-	    }
-	  }
+	return;
+      }
+    }
   }
   Avanza = Nuevo;
   *Raiz = Avanza;
