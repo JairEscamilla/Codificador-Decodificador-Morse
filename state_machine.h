@@ -4,7 +4,7 @@
 // Incluyendo las bibliotecas
 #include<stdio.h>
 #include<stdlib.h>
-#include<unistd.h>
+#include <unistd.h>
 
 // Enum de los estados de la maquina de estados
 typedef enum states{
@@ -32,6 +32,6 @@ void free_memory(States* state);
 void finish(States* state);
 
 States machine_initialiser(void); // Inicializador de la maquina de estados
-void print_process_bar(size_t time);
+
 
 #endif // !state_machine_h
