@@ -4,7 +4,7 @@
 // Incluyendo las bibliotecas
 #include<stdio.h>
 #include<stdlib.h>
-#include <unistd.h>
+#include<unistd.h>
 
 // Enum de los estados de la maquina de estados
 typedef enum states{
