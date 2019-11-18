@@ -2,32 +2,32 @@
 
 int main(void){
     // Inicializacion de variable de estado al estado inicial.
-    static States machine_state = LOAD_FILE;
+    static States MachineState = LOAD_FILE;
     TipoNodo* Raiz = NULL;
     // Instancia de pares {Label,funcion} de la maquina de estados.
-    StateMachine machine[] = {
-        {LOAD_FILE, load_file},
-        {WAIT, wait},
-        {ENCODE, encode},
-        {DECODE, decode},
-        {FREE_MEMORY, free_memory},
-        {FINISH, finish}
+    StateMachine Machine[] = {
+        {LOAD_FILE, LoadFile},
+        {WAIT, Wait},
+        {ENCODE, Encode},
+        {DECODE, Decode},
+        {FREE_MEMORY, FreeMemory},
+        {FINISH, Finish}
     };
 
     for(;;){
-        if(machine_state > STATE_NUM){
+        if(MachineState > STATE_NUM){
             puts("Error");
             return 0;
         }else{
-            // Manda Ejecutar la funcion machine.process() correspondiente a la etiqueta machine_state.
-                (*machine[machine_state].process)(&machine_state, &Raiz);
+            // Manda Ejecutar la funcion machine.process() correspondiente a la etiqueta MachineState.
+                (*Machine[MachineState].process)(&MachineState, &Raiz);
         }
     }
 
     return 0;
 }
 
-void load_file(States* state, TipoNodo** Raiz){
+void LoadFile(States* State, TipoNodo** Raiz){
     printf("Cargando archivo...");
     FILE *Archivo;
     char Renglon[100], Letra;
@@ -45,93 +45,93 @@ void load_file(States* state, TipoNodo** Raiz){
         }
     }
     fclose(Archivo);
-    *state = WAIT;
+    *State = WAIT;
     printf("Archivo cargado!\n");
 }
-void wait(States* state, TipoNodo** Raiz){
-    int opcion;
-    printf("(1) Codificar mensaje.\n(2) Decodificar mensaje.\n(3) Salir.\nIngresar opcion-> ");
-    scanf("%d", &opcion);
-    switch(opcion){
+void Wait(States* State, TipoNodo** Raiz){
+    int Opcion;
+    printf("(1) Codificar mensaje.\n(2) Decodificar mensaje.\n(3) Salir.\nIngresar opción-> ");
+    scanf("%d", &Opcion);
+    switch(Opcion){
         case 1: 
-            *state = ENCODE;
+            *State = ENCODE;
             break;
         case 2: 
-            *state = DECODE;
+            *State = DECODE;
             break;
         case 3: 
-            *state = FREE_MEMORY;
+            *State = FREE_MEMORY;
             break;
         default: 
-            printf("Esta opcion no existe!");
+            printf("Esta opción no existe!");
     }
 }
-void encode(States* state, TipoNodo** Raiz){
-    char mensaje[150], codificado[150], mensajeCodificado[150];
-    int i = 0, flag = 0;
+void Encode(States* State, TipoNodo** Raiz){
+    char Mensaje[150], Codificado[150], MensajeCodificado[150];
+    int i = 0, Flag = 0;
     printf("Ingresar frase que desea codificar a morse-> ");
-    scanf(" %s", mensaje);
-    minusculas(mensaje);
+    scanf(" %s", Mensaje);
+    Minusculas(Mensaje);
     printf("Codificando mensaje...");
-    puts("Mensaje codificado con exito!\n");
+    puts("Mensaje codificado con éxito!\n");
     printf("\nEl mensaje condificado es: ");
-    while(mensaje[i] != '\0'){
-        codificar(mensaje[i], codificado, 0, *Raiz, &flag, mensajeCodificado);
-        flag = 0;
-        printf("%s ", mensajeCodificado);
-        codificado[0] = '\0';
+    while(Mensaje[i] != '\0'){
+        Codificar(Mensaje[i], Codificado, 0, *Raiz, &Flag, MensajeCodificado);
+        Flag = 0;
+        printf("%s ", MensajeCodificado);
+        Codificado[0] = '\0';
         i++;
     }
     printf("\n");
-    *state = WAIT;
+    *State = WAIT;
 }
-void codificar(char mensaje, char codificado[], int pos, TipoNodo* Raiz, int* flag, char mensajeCodificado[]){
-    if (mensaje == Raiz->Letra){
-        *flag = 1;
-        strcpy(mensajeCodificado, codificado);
+void Codificar(char Mensaje, char Codificado[], int Pos, TipoNodo* Raiz, int* Flag, char MensajeCodificado[]){
+    if (Mensaje == Raiz->Letra){
+        *Flag = 1;
+        strcpy(MensajeCodificado, Codificado);
     }
-    if(Raiz != NULL && Raiz->Letra != mensaje && *flag == 0){
+    if(Raiz != NULL && Raiz->Letra != Mensaje && *Flag == 0){
         if(Raiz->izq != NULL){
-            codificado[pos] = '.';
-            codificado[pos + 1] = '\0';
-            codificar(mensaje, codificado, pos + 1, Raiz->izq, flag, mensajeCodificado);
+            Codificado[Pos] = '.';
+            Codificado[Pos + 1] = '\0';
+            Codificar(Mensaje, Codificado, Pos + 1, Raiz->izq, Flag, MensajeCodificado);
         }
         if(Raiz->der != NULL){
-            codificado[pos] = '-';
-            codificado[pos + 1] = '\0';
-            codificar(mensaje, codificado, pos + 1, Raiz->der, flag, mensajeCodificado);
+            Codificado[Pos] = '-';
+            Codificado[Pos + 1] = '\0';
+            Codificar(Mensaje, Codificado, Pos + 1, Raiz->der, Flag, MensajeCodificado);
         }
     }
 }
 
-void minusculas(char mensaje[]){
+void Minusculas(char Mensaje[]){
     int i = 0;
-    while (mensaje[i] != '\0'){
-        mensaje[i] = tolower(mensaje[i]);
+    while (Mensaje[i] != '\0'){
+        Mensaje[i] = tolower(Mensaje[i]);
         i++;
     }
 }
 
-void decode(States* state, TipoNodo** Raiz){
+void Decode(States* State, TipoNodo** Raiz){
     printf("Decodificando mensaje...");
-    //print_process_bar(5);
-    *state = WAIT;
+    //PrintProcessBar(5);
+    *State = WAIT;
     puts("Mensaje decodificado\n");
 }
-void free_memory(States* state, TipoNodo** Raiz){
+void FreeMemory(States* State, TipoNodo** Raiz){
     printf("Liberando memoria...\n");
     BorrarArbol(*Raiz);
-    *state = FINISH;
+    *State = FINISH;
 }
-void finish(States* state, TipoNodo** Raiz){
+void Finish(States* State, TipoNodo** Raiz){
     printf("Saliendo del programa...\n");
-    //print_process_bar(3);
+    //PrintProcessBar(3);
     exit(0);
 }
 
-void print_process_bar(size_t time){
-    size_t temp;
-    for (temp = 0; temp < time; temp++){
+void PrintProcessBar(size_t Time){
+    size_t Temp;
+    for (Temp = 0; Temp < Time; Temp++){
         printf(".");
         sleep(1);
     }

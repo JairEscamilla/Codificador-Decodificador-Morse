@@ -9,7 +9,7 @@
 #include <ctype.h>
 
 // Enum de los estados de la maquina de estados
-typedef enum states{
+typedef enum States{
     LOAD_FILE,
     WAIT,
     ENCODE,
@@ -18,33 +18,34 @@ typedef enum states{
     FINISH,
     STATE_NUM
 } States;
-typedef struct def_Arbol{
+
+typedef struct DefArbol{
     double Probabilidad;
     char Letra;
-    struct def_Arbol *izq, *der;
+    struct DefArbol *izq, *der;
 } TipoNodo;
 
 // Estructura que contendra etiqueta y funcion
 typedef struct StateMachine{    
-    States state;
-    void (*process)(States* state, TipoNodo** Raiz);
+    States State;
+    void (*process)(States* State, TipoNodo** Raiz);
 }StateMachine;
 
 
 
 void InsertarArbol(TipoNodo **Raiz, double Probabilidad, char Letra);
 void BorrarArbol(TipoNodo *Raiz);
-void codificar(char mensaje, char codificado[], int pos, TipoNodo *Raiz, int *flag, char mensajeCodificado[]);
-void minusculas(char mensaje[]);
+void Codificar(char Mensaje, char Codificado[], int Pos, TipoNodo *Raiz, int *Flag, char MensajeCodificado[]);
+void Minusculas(char Mensaje[]);
 // Prototipos de las funciones ejecutables de la maquina de estados
-void load_file(States *state, TipoNodo** Raiz);
-void wait(States* state, TipoNodo** Raiz);
-void encode(States* state, TipoNodo** Raiz);
-void decode(States* state, TipoNodo** Raiz);
-void free_memory(States* state, TipoNodo** Raiz);
-void finish(States* state, TipoNodo** Raiz);
+void LoadFile(States *State, TipoNodo** Raiz);
+void Wait(States* State, TipoNodo** Raiz);
+void Encode(States* State, TipoNodo** Raiz);
+void Decode(States* State, TipoNodo** Raiz);
+void FreeMemory(States* State, TipoNodo** Raiz);
+void Finish(States* State, TipoNodo** Raiz);
 
-States machine_initialiser(void); // Inicializador de la maquina de estados
+States MachineInitialiser(void); // Inicializador de la maquina de estados
 
 
 #endif // !state_machine_h
