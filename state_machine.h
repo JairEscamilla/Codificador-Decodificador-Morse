@@ -2,9 +2,9 @@
 #define state_machine_h
 
 // Incluyendo las bibliotecas
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <ctype.h>
 
@@ -26,13 +26,13 @@ typedef struct DefArbol{
 } TipoNodo;
 
 // Estructura que contendra etiqueta y funcion
-typedef struct StateMachine{    
+typedef struct StateMachine{
     States State;
     void (*process)(States* State, TipoNodo** Raiz);
 }StateMachine;
 
 
-
+int VerificacionEntradaDecode(char Codificado[]);
 void InsertarArbol(TipoNodo **Raiz, double Probabilidad, char Letra);
 void BorrarArbol(TipoNodo *Raiz);
 void Codificar(char Mensaje, char Codificado[], int Pos, TipoNodo *Raiz, int *Flag, char MensajeCodificado[]);

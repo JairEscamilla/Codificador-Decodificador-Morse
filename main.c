@@ -48,21 +48,23 @@ void LoadFile(States* State, TipoNodo** Raiz){
     *State = WAIT;
     printf("Archivo cargado!\n");
 }
+
 void Wait(States* State, TipoNodo** Raiz){
     int Opcion;
     printf("(1) Codificar mensaje.\n(2) Decodificar mensaje.\n(3) Salir.\nIngresar opción-> ");
-    scanf("%d", &Opcion);
+    //__fpurge(stdin);
+    scanf(" %d", &Opcion);
     switch(Opcion){
-        case 1: 
+        case 1:
             *State = ENCODE;
             break;
-        case 2: 
+        case 2:
             *State = DECODE;
             break;
-        case 3: 
+        case 3:
             *State = FREE_MEMORY;
             break;
-        default: 
+        default:
             printf("Esta opción no existe!");
     }
 }
@@ -70,11 +72,11 @@ void Encode(States* State, TipoNodo** Raiz){
     char Mensaje[150], Codificado[150], MensajeCodificado[150];
     int i = 0, Flag = 0;
     printf("Ingresar frase que desea codificar a morse-> ");
-    scanf(" %s", Mensaje);
+    scanf(" %[^\n]", Mensaje);
     Minusculas(Mensaje);
     printf("Codificando mensaje...");
     puts("Mensaje codificado con éxito!\n");
-    printf("\nEl mensaje condificado es: ");
+    printf("\nEl mensaje codificado es: ");
     while(Mensaje[i] != '\0'){
         Codificar(Mensaje[i], Codificado, 0, *Raiz, &Flag, MensajeCodificado);
         Flag = 0;
@@ -85,6 +87,7 @@ void Encode(States* State, TipoNodo** Raiz){
     printf("\n");
     *State = WAIT;
 }
+
 void Codificar(char Mensaje, char Codificado[], int Pos, TipoNodo* Raiz, int* Flag, char MensajeCodificado[]){
     if (Mensaje == Raiz->Letra){
         *Flag = 1;
@@ -112,12 +115,68 @@ void Minusculas(char Mensaje[]){
     }
 }
 
-void Decode(States* State, TipoNodo** Raiz){
-    printf("Decodificando mensaje...");
-    //PrintProcessBar(5);
-    *State = WAIT;
-    puts("Mensaje decodificado\n");
+int VerificacionEntradaDecode(char Codificado[]) {
+  for (int i = 0; i < strlen(Codificado); i++) {
+    if(Codificado[i] != '.' && Codificado[i] != '-' && Codificado[i] != ' ')
+      return 1;
+  }
+  return 0;
 }
+
+void ErrorDecode() {
+  printf ("Revise que el mensaje está correctamente codificado\n");
+  return;
+}
+
+void Decode(States* State, TipoNodo** Raiz) {
+  int i = 0, j = 0;
+  char Codificado[150], Decodificado[150];
+  TipoNodo *Temp;
+  printf ("Ingrese la cadena a decodificar\n");
+  scanf (" %[^\n]", Codificado);
+  printf("Decodificando mensaje...\n");
+  if(VerificacionEntradaDecode(Codificado))
+    printf ("No parece que el mensaje esté codificado\n");
+  else
+  {
+    while (Codificado[i] != '\0')
+    {
+      if ((Codificado [i - 1] == ' ' && Codificado [i] != ' ') || (i == 0))
+      {
+        Temp = *Raiz;
+        for (; Codificado[i] != ' ' && Codificado[i] != '\0'; i++)
+        {
+          if (Codificado[i] == '.')
+          {
+            if (Temp -> izq == NULL)
+              ErrorDecode;
+            Temp = Temp -> izq;
+          }
+          if (Codificado[i] == '-')
+          {
+            if (Temp -> der == NULL)
+              ErrorDecode;
+            Temp = Temp -> der;
+          }
+        }
+        Decodificado [j] = Temp -> Letra;
+        j++;
+      }
+      else
+        if (Codificado [i - 1] == ' ')
+        {
+          Decodificado [j] = ' ';
+          j++;
+        }
+      i++;
+    }
+    Decodificado [j] = '\0';
+    printf("Mensaje decodificado\n");
+    puts(Decodificado);
+  }
+  *State = WAIT;
+}
+
 void FreeMemory(States* State, TipoNodo** Raiz){
     printf("Liberando memoria...\n");
     BorrarArbol(*Raiz);
@@ -176,4 +235,3 @@ void BorrarArbol(TipoNodo* Raiz){
         free(Raiz);
     }
 }
-
