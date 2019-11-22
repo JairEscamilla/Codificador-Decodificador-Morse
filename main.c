@@ -1,3 +1,10 @@
+/*
+ * @author: César Mauricio Arellano Velásquez, Allan Jair Escamilla Hernández, Raúl González Portillo.
+ * @date:   19/Noviembre/2019
+ * @file:   main.c
+ * @brief:  Implementación de máquinas de estados y árboles binarios para poder codificar y decodificar mensajes en código morse.
+ */
+// Incluyendo el motor de la máquina de estados.
 #include "state_machine.h"
 
 int main(void){
@@ -26,7 +33,10 @@ int main(void){
 
     return 0;
 }
-
+/* * Estado que lee los datos de un archivo para generar el árbol binario que nos permitirá codificar y decodificar los mensajes.
+   * @param States* State Determina el siguiente estado de la máquina.
+   * @param TipoNodo **Raiz Apuntador donde se generará el árbol binario.
+*/
 void LoadFile(States* State, TipoNodo** Raiz){
     printf("Cargando archivo...");
     FILE *Archivo;
@@ -48,7 +58,10 @@ void LoadFile(States* State, TipoNodo** Raiz){
     *State = WAIT;
     printf("Archivo cargado!\n");
 }
-
+/* * Estado a la que siempre se regresa, después de realizar algún proceso, funciona como estado de espera.
+   * @param States* State Determina el siguiente estado de la máquina.
+   * @param TipoNodo **Raiz mantiene el registro del árbol binario.
+*/
 void Wait(States* State, TipoNodo** Raiz){
     int Opcion;
     printf("(1) Codificar mensaje.\n(2) Decodificar mensaje.\n(3) Salir.\nIngresar opción-> ");
@@ -68,6 +81,10 @@ void Wait(States* State, TipoNodo** Raiz){
             printf("Esta opción no existe!");
     }
 }
+/* * Estado en donde se codifica el mensaje que usuario ingresa.
+   * @param States* State Determina el siguiente estado de la máquina.
+   * @param TipoNodo **Raiz mantiene el registro del árbol binario.
+*/
 void Encode(States* State, TipoNodo** Raiz){
     char Mensaje[150], Codificado[150], MensajeCodificado[150];
     int i = 0, Flag = 0;
@@ -87,7 +104,14 @@ void Encode(States* State, TipoNodo** Raiz){
     printf("\n");
     *State = WAIT;
 }
-
+/* * Función que se manda a llamar para realizar el proceso de codificación de un mensaje determinado por el usuario.
+   * @param char Mensaje Caracter particular de la cadena se piensa codificar.
+   * @param char Codificado[] Guarda un caracter codificado.
+   * @param int Pos Mantiene la posición actual del arreglo.
+   * @param int *Flag Retorna una bandera en caso de que algo haya salido mal.
+   * @param char MensajeCodificado[] Almacena el mensaje ya codificado.
+   * @param TipoNodo *Raiz Motor de búsqueda para codificar.
+*/
 void Codificar(char Mensaje, char Codificado[], int Pos, TipoNodo* Raiz, int* Flag, char MensajeCodificado[]){
     if (Mensaje == Raiz->Letra){
         *Flag = 1;
@@ -106,7 +130,9 @@ void Codificar(char Mensaje, char Codificado[], int Pos, TipoNodo* Raiz, int* Fl
         }
     }
 }
-
+/* * Función que se manda a llamar para convertir todo el mensaje a minusculas.
+   * @param char Mensaje[] Cadena a convertir en letras minúsculas.
+*/
 void Minusculas(char Mensaje[]){
     int i = 0;
     while (Mensaje[i] != '\0'){
@@ -114,7 +140,9 @@ void Minusculas(char Mensaje[]){
         i++;
     }
 }
-
+/* * Función que verifica la entrada de la cadena en la opción de decodificar.
+   * @param char Mensaje[] Cadena a verificar.
+*/
 int VerificacionEntradaDecode(char Codificado[]) {
   for (int i = 0; i < strlen(Codificado); i++) {
     if(Codificado[i] != '.' && Codificado[i] != '-' && Codificado[i] != ' ')
@@ -123,11 +151,15 @@ int VerificacionEntradaDecode(char Codificado[]) {
   return 0;
 }
 
+/* * Función que imprime un mensaje de error.*/
 void ErrorDecode() {
   printf ("Revise que el mensaje está correctamente codificado\n");
   return;
 }
-
+/* * Estado en donde se decodifica el mensaje que usuario ingresa.
+   * @param States* State Determina el siguiente estado de la máquina.
+   * @param TipoNodo **Raiz mantiene el registro del árbol binario.
+*/
 void Decode(States* State, TipoNodo** Raiz) {
   int i = 0, j = 0;
   char Codificado[150], Decodificado[150];
@@ -176,26 +208,28 @@ void Decode(States* State, TipoNodo** Raiz) {
   }
   *State = WAIT;
 }
-
+/* * Estado en donde se libera memoria del árbol binario.
+   * @param States* State Determina el siguiente estado de la máquina.
+   * @param TipoNodo **Raiz mantiene el registro del árbol binario.
+*/
 void FreeMemory(States* State, TipoNodo** Raiz){
     printf("Liberando memoria...\n");
     BorrarArbol(*Raiz);
     *State = FINISH;
 }
+/* * Estado que da fin al programa.
+   * @param States* State Determina el siguiente estado de la máquina.
+   * @param TipoNodo **Raiz mantiene el registro del árbol binario.
+*/
 void Finish(States* State, TipoNodo** Raiz){
     printf("Saliendo del programa...\n");
-    //PrintProcessBar(3);
     exit(0);
 }
-
-void PrintProcessBar(size_t Time){
-    size_t Temp;
-    for (Temp = 0; Temp < Time; Temp++){
-        printf(".");
-        sleep(1);
-    }
-}
-
+/* * Función que insertar en el árbol binario las letras y sus probabilidades.
+   * @param TipoNodo **Raiz Almacena orden de las letras del árbol binario.
+   * @param double Probabilidad Almacena la probabilidad de aparición de la letra.
+   * @param char Letra caracter a insertar en el árbol binario.
+*/
 void InsertarArbol(TipoNodo **Raiz, double Probabilidad, char Letra){
     TipoNodo *Avanza, *Nuevo;
     Avanza = *Raiz;
@@ -228,6 +262,9 @@ void InsertarArbol(TipoNodo **Raiz, double Probabilidad, char Letra){
     Avanza = Nuevo;
     *Raiz = Avanza;
 }
+/* * Función que libera memoria del árbol binario.
+   * @param TipoNodo **Raiz Apuntador del árbol binario a liberar memoria.
+*/
 void BorrarArbol(TipoNodo* Raiz){
     if (Raiz != NULL){
         BorrarArbol(Raiz->izq);

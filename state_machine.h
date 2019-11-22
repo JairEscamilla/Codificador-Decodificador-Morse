@@ -1,3 +1,9 @@
+/*
+ * @author: César Mauricio Arellano Velásquez, Allan Jair Escamilla Hernández, Raúl González Portillo.
+ * @date:   19/Noviembre/2019
+ * @file:   state_machine.h
+ * @brief:  Motor de la máquina de estados.
+ */
 #ifndef state_machine_h
 #define state_machine_h
 
@@ -19,6 +25,7 @@ typedef enum States{
     STATE_NUM
 } States;
 
+//Estructura árbol binario.
 typedef struct DefArbol{
     double Probabilidad;
     char Letra;
@@ -32,6 +39,7 @@ typedef struct StateMachine{
 }StateMachine;
 
 
+// Estructuras de las funciones
 int VerificacionEntradaDecode(char Codificado[]);
 void InsertarArbol(TipoNodo **Raiz, double Probabilidad, char Letra);
 void BorrarArbol(TipoNodo *Raiz);
